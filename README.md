@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # Onetwothreecheckout
 
 TODO: Write a gem description
@@ -28,9 +27,3 @@ TODO: Write usage instructions here
 3. Commit your changes (`git commit -am 'Add some feature'`)
 4. Push to the branch (`git push origin my-new-feature`)
 5. Create a new Pull Request
-=======
-onetwothreecheckout
-===================
-
-Gem for interacting with 123 Checkout
->>>>>>> 186a33df861d959ec31ce3f50e3f9bf7964de037
