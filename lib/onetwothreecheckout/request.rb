@@ -7,7 +7,7 @@ require 'hashie'
 module Onetwothreecheckout
   class Request
 
-    attr_accessor :data, :env, :digest
+    attr_accessor :data, :env, :digest, :certificate
 
     ENDPOINT = {
       test: 'http://uat.123.co.th/payment/paywith123.aspx',
@@ -18,6 +18,7 @@ module Onetwothreecheckout
       raise "Merchant ID is nil" if Onetwothreecheckout::Config.merchant_id.nil?
       raise "Secret key is nil"  if Onetwothreecheckout::Config.secret_key.nil?
 
+      @certificate = OpenSSL::X509::Certificate.new(Onetwothreecheckout::Config.certificate)
       @digest = OpenSSL::Digest.new('sha1')
 
       @data = data
@@ -29,10 +30,19 @@ module Onetwothreecheckout
     end
 
     def payload
-      Base64.strict_encode64(build_request)
+      Base64.strict_encode64(encrypted_request)
+    end
+
+    def make_123_checkout_request!
+      RestClient.post endpoint, :OneTwoThreeReq => payload
+      #Response.new(body).decrypt_body
     end
 
   private
+
+    def encrypted_request
+      OpenSSL::PKCS7::encrypt([certificate], build_request)
+    end
 
     def build_request
       final_hash = build_final_hash
@@ -46,9 +56,9 @@ module Onetwothreecheckout
 
     def build_final_hash
       data.merge({
-        version: '1.1',
-        merchantID: Onetwothreecheckout::Config.merchant_id,
-        hashValue: calculate_hash_data_digest
+        'Version'    => '1.1',
+        'MerchantID' => Onetwothreecheckout::Config.merchant_id,
+        'HashValue'  => calculate_hash_data_digest
       })
     end
 
