@@ -24,7 +24,7 @@ First we need to create a request hash
 request_hash = { 
   'MessageID'    =>      '12345abcdef',            # unique message id
   'InvoiceNo'    =>      '00000900',               # unique invoice number
-  'Amount'       =>      '000040000000'            # amount must have 12 digits
+  'Amount'       =>      '000040000000',           # amount must have 12 digits
   'CurrencyCode' =>      'THB',                    # THB for thai baht (based on http://en.wikipedia.org/wiki/ISO_4217)
   'CountryCode'  =>      'THA',                    # THA for Thailand  (based on iso 3166 country code)
   'ProductDesc'  =>      'description of product', # Describe the product
@@ -38,14 +38,6 @@ request_hash = {
 request  = Onetwothreecheckout::Request.new(data: request_hash)
 response = request.make_123_checkout_request! # this will make the request and return a response
 ```
-
-To Save the card into 2c2p you just need to add the token
-
-```ruby
-request = Twoctwop::Request.new(data: request_hash, token: 'blah')
-```
-
-This will save the token and you can make payments using tokens instead of the card information. You can generate any token you want from your application as long as you can reference it again when you need to pass it into the `Twoctwop::Request` object.
 
 ### Agent Codes
 

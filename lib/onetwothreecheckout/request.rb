@@ -41,13 +41,13 @@ module Onetwothreecheckout
   private
 
     def encrypted_request
-      OpenSSL::PKCS7::encrypt([certificate], build_request)
+      OpenSSL::PKCS7::encrypt([certificate], build_request).to_s
     end
 
     def build_request
       final_hash = build_final_hash
 
-      Builder::XmlMarkup.new.PaymentRequest do |p|
+      Builder::XmlMarkup.new.OneTwoThreeReq do |p|
         final_hash.keys.each do |k|
           p.tag!(k, final_hash[k])
         end
